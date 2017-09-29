@@ -38,12 +38,15 @@ except:
             pass
 
 #reply to statuses directed towards the bot
-name = "MeanBot001"
-replies = stream.filter(track=[name, name.lower()])
-print(replies)
-for id in replies:
-    api.update_status(rep[id])
-    print("Reply Sent")
+twt = api.search(q="MeanBot001")
+t = ['meanbot001', 'Meanbot001', 'meanBot001']
+for s in twt:
+    for i in t:
+        if i == s.text:
+            sn = s.user.screen_name
+            m = "@%s " + rep % (sn)
+            s = api.update_status(m, s.id)
+            print("Reply Sent")
 #reply to DM's directed towards the bot
 direct_message = api.direct_message()
 for dm in direct_message:
