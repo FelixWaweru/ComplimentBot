@@ -22,34 +22,54 @@ tweets = ["You are unloved.", "Sometimes if you squint really hard you can see y
     "emoji after it. You are emojiless and thus hated more than poop.", "You are your own worst enemy and everything "
     "you think is wrong with you is who you really are.", "You are kinda smelly."]
 rep = "I am a bot incapable of emotion or responsiveness. Go away."
-try:
-    randomizer = random.randint(0, 9)
-    response = tweets[randomizer]
-    api.update_status(response)
-    print("Tweet Sent")
-    time.sleep(10800)
-except:
-    for status in tweepy.Cursor(api.user_timeline).items():
-        try:
-            api.destroy_status(status.id)
-            api.update_status(response)
-            print("Tweet Sent")
-        except:
-            pass
+def tweeter():
+    try:
+        randomizer = random.randint(0, 9)
+        response = tweets[randomizer]
+        status = api.update_status(response)
+        print("Tweet Sent")
+        time.sleep(21600)
+    except:
+        for status in tweepy.Cursor(api.user_timeline).items():
+            try:
+                status_id = status.id
+                api.destroy_status(status_id)
+                api.update_status(response)
+                print("Tweet Sent")
+                break
+            except:
+                pass
 
-#reply to statuses directed towards the bot
-twt = api.search(q="MeanBot001")
-t = ['meanbot001', 'Meanbot001', 'meanBot001']
-for s in twt:
-    for i in t:
-        if i == s.text:
-            sn = s.user.screen_name
-            m = "@%s " + rep % (sn)
-            s = api.update_status(m, s.id)
-            print("Reply Sent")
-#reply to DM's directed towards the bot
-direct_message = api.direct_message()
-for dm in direct_message:
-    dm_id= dm.id
-    api.send_direct_message(dm_id, rep)
-    print("Dm Sent")
+def replier():
+    #reply to statuses directed towards the bot
+    twt = api.search(q="MeanBot001")
+    t = ['meanbot001', 'Meanbot001', 'meanBot001']
+    for s in twt:
+        for i in t:
+            if i == s.text:
+                print("Reply received")
+                sn = s.user.screen_name
+                m = "@%s " + rep % (sn)
+                s = api.update_status(m, s.id)
+                print("Reply Sent")
+
+def messager():
+    #reply to DM's directed towards the bot
+    direct_message = api.direct_messages()
+    for dm in direct_message:
+        dm_id= dm.id
+        api.send_direct_message(dm_id, rep)
+        print("Dm Sent")
+
+def new_follower():
+    new_followers = api.followers()
+    for i in new_followers:
+        api.send_direct_message(user_id=i.from_user, text="Please do not take any personal offence from any of my tweets.")
+        print("You messaged new user " + i.from_user)
+
+running = True
+while running is True:
+    tweeter()
+    replier()
+    messager()
+    new_follower()
