@@ -22,23 +22,21 @@ tweets = ["You are unloved.", "Sometimes if you squint really hard you can see y
     "emoji after it. You are emojiless and thus hated more than poop.", "You are your own worst enemy and everything "
     "you think is wrong with you is who you really are.", "You are kinda smelly."]
 rep = "I am a bot incapable of emotion or responsiveness. Go away."
+
 def tweeter():
     try:
         randomizer = random.randint(0, 9)
         response = tweets[randomizer]
         status = api.update_status(response)
         print("Tweet Sent")
-        time.sleep(21600)
-    except:
-        for status in tweepy.Cursor(api.user_timeline).items():
-            try:
+    except tweepy.error.TweepError:
+        for status in api.user_timeline():
+            if status == response:
                 status_id = status.id
                 api.destroy_status(status_id)
                 api.update_status(response)
                 print("Tweet Sent")
                 break
-            except:
-                pass
 
 def replier():
     #reply to statuses directed towards the bot
@@ -56,9 +54,8 @@ def replier():
 def messager():
     #reply to DM's directed towards the bot
     direct_message = api.direct_messages()
-    for dm in direct_message:
-        dm_id= dm.id
-        api.send_direct_message(dm_id, rep)
+    for i in direct_message:
+        api.send_direct_message(user_id=i.from_user, text=rep)
         print("Dm Sent")
 
 def new_follower():
@@ -68,8 +65,13 @@ def new_follower():
         print("You messaged new user " + i.from_user)
 
 running = True
+i = 0
 while running is True:
-    tweeter()
-    replier()
-    messager()
-    new_follower()
+    if i is 0:
+        tweeter()
+    if api.search(q='MeanBot001'):
+        replier()
+    if api.direct_messages():
+        messager()
+    if api.followers():
+        new_follower()
