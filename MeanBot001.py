@@ -1,11 +1,10 @@
 # import statements
 import random
+import threading
 
-import tweepy,os.path, time, secrets
+import tweepy, time, secrets
 
 # Authentification
-from twitter import stream
-
 CONSUMER_KEY = secrets.CONSUMER_KEY
 CONSUMER_SECRET = secrets.CONSUMER_SECRET
 ACCESS_KEY = secrets.ACCESS_KEY
@@ -14,64 +13,123 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 print('Connected')
-tweets = ["You are unloved.", "Sometimes if you squint really hard you can see your future crumbling around you as time "
-          "goes on.", "Today is the day you finally acheive something great, seeing this tweet.",
-          "I fart in your general direction.", "Someone laughed at you today and you will never know what it was about."
-    ,"Though they may never admit it, your parents sometimes dislike you strongly.", "I have good and bad news. Good "
-    "news,someday you will die, bad news, we have to attend your funeral.", "Nobody likes poop and yet they made an "
-    "emoji after it. You are emojiless and thus hated more than poop.", "You are your own worst enemy and everything "
-    "you think is wrong with you is who you really are.", "You are kinda smelly."]
-rep = "I am a bot incapable of emotion or responsiveness. Go away."
+prefix = ["I hope you know that",
+          "Remember that",
+          "Please know that",
+          "Do you know that",
+          "You,",
+          "Please remember,",
+          "Hey there,"]
+
+compliments = ["an amazing person.",
+               "loved.",
+               "made of star dust and love.",
+               "capable of anything you set your heart to.",
+               "the world to someone.",
+               "doing great so far even if you don't feel like it yet.",
+               "not alone. You have us here with you.",
+               "going to make it through the day.",
+               "looking great today.",
+               "slaying so hard right now. Almost called the murder detectives on you.",
+               "allowed to feel great about yourself.",
+               "the most wonderful and amazing you you can be.",
+               "the universe incarnate. Incomprehensibly spectacular and unique."
+               ]
+
+emojis = ["❤️", "♥️", "💗", "💓", "💕", "💖", "💞 ", "💘", "💛", "💙", "💜", "💚", "💝", "💌", "🌝", "🌞", "☀️"]
+
+prefixrandomizer = random.randint(0, 6)
+complimentsrandomizer = random.randint(0, 12)
+emojirandomizer = random.randint(0, 16)
+update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[emojirandomizer]
+
+statements = ["I think you're cool",
+              "Your smile is the highlight of any day.",
+              "If I was alive, I'd want to be your friend.",
+              ]
+statementsrandomizer = random.randint(0, 2)
+update2 = statements[statementsrandomizer] + " : " + emojis[emojirandomizer]
+
+allstatus = [update, update2]
+statusrandomizer = random.randint(0, 1)
+allupdates = allstatus[statusrandomizer]
 
 def tweeter():
-    try:
-        randomizer = random.randint(0, 9)
-        response = tweets[randomizer]
-        status = api.update_status(response)
-        print("Tweet Sent")
-    except tweepy.error.TweepError:
+    # try:
+    #     api.update_status(allupdates)
+    #     print("Tweet Sent")
+    #     time.sleep(10800)
+    # except tweepy.error.TweepError:
         for status in api.user_timeline():
-            if status == response:
+            # if status == update:
+                print("Uh oh. Deleting already sent tweet")
                 status_id = status.id
                 api.destroy_status(status_id)
-                api.update_status(response)
-                print("Tweet Sent")
+                # api.update_status(allupdates)
+                # print("Tweet Resent")
+                # time.sleep(10800)
                 break
 
 def replier():
     #reply to statuses directed towards the bot
-    twt = api.search(q="MeanBot001")
-    t = ['meanbot001', 'Meanbot001', 'meanBot001']
-    for s in twt:
-        for i in t:
-            if i == s.text:
-                print("Reply received")
-                sn = s.user.screen_name
-                m = "@%s " + rep % (sn)
-                s = api.update_status(m, s.id)
+    repIds = []
+    twt = api.search(q="@GoodFeelsBot", count=100)
+    for tweet in twt:
+        with open('Replies.txt') as textCheck2:
+            repId = tweet.id
+            str(repId)
+            found = False
+            for line in textCheck2:
+                if str(repId) in line:  # Key line: check if `w` is in the line.
+                    print("Already replied to Reply.")
+                    pass
+                    found = True
+            if not found:
+                print("Reply received.")
+                word = tweet.text
+                print(word)
+                sn = tweet.user.screen_name
+                str(sn)
+                m = "@" + sn + " " + allupdates + " :) @" + sn
+                api.update_status(m, tweet.id)
                 print("Reply Sent")
-
-def messager():
-    #reply to DM's directed towards the bot
-    direct_message = api.direct_messages()
-    for i in direct_message:
-        api.send_direct_message(user_id=i.from_user, text=rep)
-        print("Dm Sent")
+                followerText = open('Replies.txt', 'w')
+                followerText.write(repId + "\n")
+                followerText.close()
+                repIds.append(repId)
+            break
 
 def new_follower():
     new_followers = api.followers()
-    for i in new_followers:
-        api.send_direct_message(user_id=i.from_user, text="Please do not take any personal offence from any of my tweets.")
-        print("You messaged new user " + i.from_user)
+    for follower in new_followers:
+        with open('Followers.txt') as textCheck1:
+            repId = follower.id
+            str(repId)
+            found = False
+            for line in textCheck1:
+                if str(repId) in line:  # Key line: check if `w` is in the line.
+                    print("Already replied to Direct Message.")
+                    pass
+                    found = True
+            if not found:
+                for i in new_followers:
+                    api.send_direct_message(user_id=i.id,
+                                            text="Heyhey @" + i.screen_name + ". Stick around for some daily positivity or mention me "
+                                                                              "anywhere on Twitter and I'll bring the positivity to you :)")
+                    print("You messaged new user @" + i.screen_name)
+                    followerText = open('Followers.txt', 'w')
+                    followerText.write(repId + "\n")
+                    followerText.close()
+                    break
 
 running = True
 i = 0
 while running is True:
-    if i is 0:
-        tweeter()
-    if api.search(q='MeanBot001'):
-        replier()
-    if api.direct_messages():
-        messager()
-    if api.followers():
-        new_follower()
+    # if i is 0:
+    # t = threading.Thread(target=tweeter)
+    # t.start()
+    tweeter()
+    # t1 = threading.Thread(target=new_follower)
+    # t1.start()
+    # replier()
+    # time.sleep(180)
