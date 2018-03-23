@@ -49,7 +49,7 @@ compliments = ["an amazing person.",
                "secretly an inspiration to many people around you."
                ]
 
-emojis = ["❤️", "♥️", "💗", "💓", "💕", "💖", "💞 " "💘", "💛", "💙", "💜", "💚", "💝", "💌", "🌝", "🌞", "☀️"]
+emojis = ["❤", "♥", "💗", "💓", "💕", "💖", "💞 " "💘", "💛", "💙", "💜", "💚", "💝", "💌", "🌝", "🌞", "☀"]
 
 prefixrandomizer = random.randint(0, 10)
 complimentsrandomizer = random.randint(0, 17)
@@ -142,15 +142,13 @@ def new_follower():
                         followerText.writelines(str(repId) + "\n")
             break
 
-def exitBot():
-    sys.exit()
-
-def threader():
-    running = True
-    while running is True:
-        t = threading.Thread(target=tweeter)
-        t.start()
-        t1 = threading.Thread(target=new_follower)
-        t1.start()
-        replier()
-
+running = True
+while running is True:
+    t = threading.Thread(target=tweeter)
+    t.start()
+    t1 = threading.Thread(target=new_follower)
+    t1.start()
+    replier()
+    exitCode = input("Type exit to end process")
+    if exitCode is "exit":
+        sys.exit("Exiting")

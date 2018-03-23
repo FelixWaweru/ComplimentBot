@@ -20,11 +20,12 @@ def deleter():
         api.destroy_status(status_id)
         break
 
-loops = input("How many tweets you want gone cuz? \n")
-int(loops)
-i = 0
-while i != loops:
-    deleter()
-    i = i+1
-# else i == loops:
-#     print("It's done cuz.")
+def startDeletion():
+    loops = input("How many tweets you want gone cuz? \n")
+    int(loops)
+    i = 0
+    while i != loops:
+        deleter()
+        i = i + 1
+        # else i == loops:
+        #     print("It's done cuz.")
