@@ -39,7 +39,7 @@ compliments = ["an amazing person.",
                "going to make it through the day.",
                "looking great today.",
                "slaying so hard right now. Almost called the murder detectives on you.",
-               "allowed to feel great about yourself.",
+               "allowed to feel great about yourself today.",
                "the most wonderful and amazing you you can be.",
                "the universe incarnate. Incomprehensibly spectacular and unique.",
                "making someone out there very proud.",
@@ -116,7 +116,7 @@ def replier():
 def new_follower():
     new_followers = api.followers()
     for follower in new_followers:
-        with open('/home/MeanBot001/ComplimentBot/Followers.txt/Followers.txt', 'r') as textCheck1:
+        with open('/home/MeanBot001/ComplimentBot/Followers.txt', 'r') as textCheck1:
             followerId = follower.id
             str(followerId)
             followerLine = textCheck1.readlines()
