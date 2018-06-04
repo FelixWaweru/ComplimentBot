@@ -1,6 +1,7 @@
 import ComplimentBot
 import Deleter
 import sys
+import threading
 
 header = open("Header.txt","r")
 print("\n" + "\n" + header.read())
@@ -19,7 +20,8 @@ def terminalExecution():
             print("You chose " + firstOption + "\n")
             print("Launching bot")
             try:
-                ComplimentBot.threader()
+                botLaunch = threading.Thread(target=ComplimentBot.threader())
+                botLaunch.start()
                 print("Bot successfully launched.")
             except:
                 print("Bot could not be launched. Please try again.")
@@ -31,7 +33,8 @@ def terminalExecution():
             if choice is "y" or "Y":
                 try:
                     print("Tweet deletion commencing.")
-                    Deleter.startDeletion()
+                    deleteTweet = threading.Thread(target=Deleter.startDeletion())
+                    deleteTweet.start()
                 except:
                     print("Tweets could not be deleted. Pls try again")
             elif choice is "n" or "N":
@@ -56,8 +59,7 @@ def terminalExecution():
             choice = input("y/n: ")
             if choice is "y" or "Y":
                 print("Terminal ended successfully.")
-                sys.exit()
-
+                sys.exit(0)
             elif choice is "n" or "N":
                 print("Cancelling Terminal termination")
 

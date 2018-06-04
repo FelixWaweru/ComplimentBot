@@ -56,12 +56,6 @@ complimentsrandomizer = random.randint(0, 17)
 emojirandomizer = random.randint(0, 16)
 update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[emojirandomizer]
 
-statements = ["I think you're cool",
-              "Your smile is the highlight of any day.",
-              "If I was alive, I'd want to be your friend.",
-              "Are you a banana skin because I find you a-peeling.",
-              "You must smell amazing."
-              ]
 prefixrandomizer = random.randint(0, 10)
 complimentsrandomizer = random.randint(0, 17)
 emojirandomizer = random.randint(0, 16)
@@ -71,6 +65,7 @@ allstatus = [update, update2]
 statusrandomizer = random.randint(0, 1)
 # allupdates = allstatus[statusrandomizer]
 allupdates = update
+
 
 def tweeter():
     try:
@@ -93,57 +88,52 @@ def replier():
     complimentsrandomizer2 = random.randint(0, 17)
     emojirandomizer2 = random.randint(0, 16)
     reply = prefix[prefixrandomizer2] + " you are " + compliments[complimentsrandomizer2] + " : " + emojis[emojirandomizer2]
+
     #reply to statuses directed towards the bot
-    repIds = []
-    twt = api.search(q="@GoodFeelsBot", count=100)
-    for tweet in twt:
-        with open('Replies.txt') as textCheck2:
-            repId = tweet.id
-            str(repId)
-            found = False
-            for line in textCheck2:
-                if str(repId) in line:  # Key line: check if `w` is in the line.
-                    pass
-                    found = True
-            if not found:
+
+    replyTwt = api.search(q="@GoodFeelsBot", count=100)
+    for tweet in replyTwt:
+        repId = tweet.id
+        with open('/home/MeanBot001/ComplimentBot/Replies.txt', 'r') as textCheck2:
+            line = textCheck2.readlines()
+            if str(repId) in line:
+                break
+
+            elif str(repId) not in line:
                 print("Reply received.")
-                word = tweet.text
-                print(word)
+                words = tweet.text
+                print(words)
                 sn = tweet.user.screen_name
                 str(sn)
                 m = "@" + sn + " Heyhey. " + reply + " :) @" + sn
                 api.update_status(m, tweet.id)
                 print("Reply Sent")
                 with codecs.open('/home/MeanBot001/ComplimentBot/Replies.txt', 'w') as followerText:
-                    followerText = open('Replies.txt', 'w')
                     followerText.writelines(str(repId) + "\n")
-                    repIds.append(repId)
             break
     time.sleep(180)
 
 def new_follower():
     new_followers = api.followers()
     for follower in new_followers:
-        with open('Followers.txt') as textCheck1:
-            repId = follower.id
-            str(repId)
-            found = False
-            for line in textCheck1:
-                if str(repId) in line:  # Key line: check if `w` is in the line.
-                    pass
-                    found = True
-            if not found:
+        with open('/home/MeanBot001/ComplimentBot/Followers.txt/Followers.txt', 'r') as textCheck1:
+            followerId = follower.id
+            str(followerId)
+            followerLine = textCheck1.readlines()
+            if str(followerId) in followerLine:
+                    break
+            elif str(followerId) not in followerLine:
                 with codecs.open('/home/MeanBot001/ComplimentBot/Followers.txt', 'w') as followerText:
                     for i in new_followers:
                         api.send_direct_message(user_id=i.id,
                                             text="Heyhey @" + i.screen_name + ". Stick around for some daily positivity or mention me "
                                                                               "anywhere on Twitter and I'll bring the positivity to you :)")
                         print("You messaged new user @" + i.screen_name)
-                        followerText.writelines(str(repId) + "\n")
+                        followerText.writelines(str(followerId) + "\n")
             break
 
 def exitBot():
-    sys.exit()
+    sys.exit(0)
 
 def threader():
     running = True
