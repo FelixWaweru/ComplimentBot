@@ -85,6 +85,23 @@ statusrandomizer = random.randint(0, 1)
 # allupdates = allstatus[statusrandomizer]
 allupdates = update
 
+class replyStreamer(tweepy.StreamListener):
+    # Method carried out when tweet is received
+    def on_status(self, status):
+        prefixrandomizer2 = random.randint(0, 10)
+        complimentsrandomizer2 = random.randint(0, 17)
+        emojirandomizer2 = random.randint(0, 16)
+        reply = prefix[prefixrandomizer2] + " you are " + compliments[complimentsrandomizer2] + " : " \
+                + emojis[emojirandomizer2]
+        print("Reply received.")
+        print(status.text)
+        sn = status.user.screen_name
+        str(sn)
+        m = "@" + sn + " Heyhey. " + reply + " :) @" + sn
+        api.create_favorite(status.id)
+        api.update_status(m, status.id)
+        print("Reply Sent")
+
 
 def tweeter():
     try:
@@ -103,34 +120,11 @@ def tweeter():
                 break
 
 def replier():
-    prefixrandomizer2 = random.randint(0, 10)
-    complimentsrandomizer2 = random.randint(0, 17)
-    emojirandomizer2 = random.randint(0, 16)
-    reply = prefix[prefixrandomizer2] + " you are " + compliments[complimentsrandomizer2] + " : " + emojis[emojirandomizer2]
-
     #reply to statuses directed towards the bot
+    ReplyStreamer = replyStreamer()
+    myStream = tweepy.Stream(auth=api.auth, listener=ReplyStreamer)
 
-    replyTwt = api.search(q="@GoodFeelsBot", count=100)
-    for tweet in replyTwt:
-        repId = tweet.id
-        with open('/home/MeanBot001/ComplimentBot/Replies.txt', 'r') as textCheck2:
-            line = textCheck2.readlines()
-            if str(repId) in line:
-                break
-
-            elif str(repId) not in line:
-                print("Reply received.")
-                words = tweet.text
-                print(words)
-                sn = tweet.user.screen_name
-                str(sn)
-                m = "@" + sn + " Heyhey. " + reply + " :) @" + sn
-                api.update_status(m, tweet.id)
-                print("Reply Sent")
-                with codecs.open('/home/MeanBot001/ComplimentBot/Replies.txt', 'w') as followerText:
-                    followerText.writelines(str(repId) + "\n")
-            break
-    time.sleep(180)
+    replyTwt = myStream.filter(track=['@GoodFeelsBot'], async=True)
 
 def new_follower():
     new_followers = api.followers()
@@ -161,5 +155,6 @@ def threader():
         tweeterThread.start()
         followerThread = threading.Thread(target=new_follower)
         followerThread.start()
-        replier()
+        replierThread = threading.Thread(target=replier)
+        replierThread.start()
 

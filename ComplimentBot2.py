@@ -22,6 +22,7 @@ prefix = ["I hope you know that",
           "Please know that",
           "Do know that",
           "You,",
+          "Know that",
           "Please remember,",
           "Hey there,",
           "Keep in mind that",
@@ -39,29 +40,41 @@ compliments = ["an amazing person.",
                "going to make it through the day.",
                "looking great today.",
                "slaying so hard right now. Almost called the murder detectives on you.",
-               "allowed to feel great about yourself.",
+               "allowed to feel great about yourself today.",
                "the most wonderful and amazing you you can be.",
                "the universe incarnate. Incomprehensibly spectacular and unique.",
                "making someone out there very proud.",
                "worth the life you have been gifted.",
                "deserving of all the love in the world.",
                "looking lovely today.",
-               "secretly an inspiration to many people around you."
+               "talented.",
+               "so special.",
+               "beautiful.",
+               "one of a kind.",
+               "capable of anything you put your mind to.",
+               "a joy",
+               "a valuable human being.",
+               "secretly an inspiration to many people around you.",
+               "a pleasure to know.",
+               "worth the life you have been gifted.",
+               "even more beautiful on the inside than you are on the outside.",
+               "a great example to others.",
+               "a good friend.",
+               "the change this world needs.",
+               "amazing!",
+               "valued.",
+               "enough.",
+               "really something special."
                ]
 
-emojis = ["❤", "♥", "💗", "💓", "💕", "💖", "💞 " "💘", "💛", "💙", "💜", "💚", "💝", "💌", "🌝", "🌞", "☀"]
+emojis = ["❤️", "♥️", "💗", "💓", "💕", "💖", "💞 " "💘", "💛", "💙", "💜", "💚", "💝", "💌", "🌝", "🌞", "☀️", "🌸",
+          "🌹", "🌺", "🌻", "💐", "🌼", "🏵️", "⭐", "🌟", "🌠", "🌈"]
 
 prefixrandomizer = random.randint(0, 10)
 complimentsrandomizer = random.randint(0, 17)
 emojirandomizer = random.randint(0, 16)
 update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[emojirandomizer]
 
-statements = ["I think you're cool",
-              "Your smile is the highlight of any day.",
-              "If I was alive, I'd want to be your friend.",
-              "Are you a banana skin because I find you a-peeling.",
-              "You must smell amazing."
-              ]
 prefixrandomizer = random.randint(0, 10)
 complimentsrandomizer = random.randint(0, 17)
 emojirandomizer = random.randint(0, 16)
@@ -71,6 +84,24 @@ allstatus = [update, update2]
 statusrandomizer = random.randint(0, 1)
 # allupdates = allstatus[statusrandomizer]
 allupdates = update
+
+class replyStreamer(tweepy.StreamListener):
+    #Method carried out when tweet is received
+    def on_status(self, status):
+        prefixrandomizer2 = random.randint(0, 10)
+        complimentsrandomizer2 = random.randint(0, 17)
+        emojirandomizer2 = random.randint(0, 16)
+        reply = prefix[prefixrandomizer2] + " you are " + compliments[complimentsrandomizer2] + " : " \
+                + emojis[emojirandomizer2]
+        print("Reply received.")
+        print(status.text)
+        sn = status.user.screen_name
+        str(sn)
+        m = "@" + sn + " Heyhey. " + reply + " :) @" + sn
+        api.create_favorite(status.id)
+        api.update_status(m, status.id)
+        print("Reply Sent")
+
 
 def tweeter():
     try:
@@ -89,66 +120,43 @@ def tweeter():
                 break
 
 def replier():
-    prefixrandomizer2 = random.randint(0, 10)
-    complimentsrandomizer2 = random.randint(0, 17)
-    emojirandomizer2 = random.randint(0, 16)
-    reply = prefix[prefixrandomizer2] + " you are " + compliments[complimentsrandomizer2] + " : " + emojis[emojirandomizer2]
     #reply to statuses directed towards the bot
-    repIds = []
-    twt = api.search(q="@GoodFeelsBot", count=100)
-    for tweet in twt:
-        with open('Replies.txt') as textCheck2:
-            repId = tweet.id
-            str(repId)
-            found = False
-            for line in textCheck2:
-                if str(repId) in line:  # Key line: check if `w` is in the line.
-                    pass
-                    found = True
-            if not found:
-                print("Reply received.")
-                word = tweet.text
-                print(word)
-                sn = tweet.user.screen_name
-                str(sn)
-                m = "@" + sn + " Heyhey. " + reply + " :) @" + sn
-                api.update_status(m, tweet.id)
-                print("Reply Sent")
-                with codecs.open('/home/MeanBot001/ComplimentBot/Replies.txt', 'w') as followerText:
-                    followerText = open('Replies.txt', 'w')
-                    followerText.writelines(str(repId) + "\n")
-                    repIds.append(repId)
-            break
-    time.sleep(180)
+    ReplyStreamer = replyStreamer()
+    myStream = tweepy.Stream(auth=api.auth, listener=ReplyStreamer)
+
+    replyTwt = myStream.filter(track=['@GoodFeelsBot'], async=True)
 
 def new_follower():
     new_followers = api.followers()
     for follower in new_followers:
-        with open('Followers.txt') as textCheck1:
-            repId = follower.id
-            str(repId)
-            found = False
-            for line in textCheck1:
-                if str(repId) in line:  # Key line: check if `w` is in the line.
-                    pass
-                    found = True
-            if not found:
+        with open('/home/MeanBot001/ComplimentBot/Followers.txt', 'r') as textCheck1:
+            followerId = follower.id
+            str(followerId)
+            followerLine = textCheck1.readlines()
+            if str(followerId) in followerLine:
+                    break
+            elif str(followerId) not in followerLine:
                 with codecs.open('/home/MeanBot001/ComplimentBot/Followers.txt', 'w') as followerText:
                     for i in new_followers:
                         api.send_direct_message(user_id=i.id,
                                             text="Heyhey @" + i.screen_name + ". Stick around for some daily positivity or mention me "
                                                                               "anywhere on Twitter and I'll bring the positivity to you :)")
                         print("You messaged new user @" + i.screen_name)
-                        followerText.writelines(str(repId) + "\n")
+                        followerText.writelines(str(followerId) + "\n")
             break
 
-running = True
-while running is True:
-    t = threading.Thread(target=tweeter)
-    t.start()
-    t1 = threading.Thread(target=new_follower)
-    t1.start()
-    replier()
-    exitCode = input("Type exit to end process")
-    if exitCode is "exit":
-        sys.exit("Exiting")
+def exitBot():
+    sys.exit(0)
+
+def threader():
+    running = True
+    while running is True:
+        tweeterThread = threading.Thread(target=tweeter)
+        tweeterThread.start()
+        followerThread = threading.Thread(target=new_follower)
+        followerThread.start()
+        replier()
+
+replier()
+
+
