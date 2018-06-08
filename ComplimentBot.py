@@ -22,6 +22,7 @@ prefix = ["I hope you know that",
           "Please know that",
           "Do know that",
           "You,",
+          "Know that",
           "Please remember,",
           "Hey there,",
           "Keep in mind that",
@@ -46,10 +47,28 @@ compliments = ["an amazing person.",
                "worth the life you have been gifted.",
                "deserving of all the love in the world.",
                "looking lovely today.",
-               "secretly an inspiration to many people around you."
+               "talented.",
+               "so special.",
+               "beautiful.",
+               "one of a kind.",
+               "capable of anything you put your mind to.",
+               "a joy",
+               "a valuable human being.",
+               "secretly an inspiration to many people around you.",
+               "a pleasure to know.",
+               "worth the life you have been gifted.",
+               "even more beautiful on the inside than you are on the outside.",
+               "a great example to others.",
+               "a good friend.",
+               "the change this world needs.",
+               "amazing!",
+               "valued.",
+               "enough.",
+               "really something special."
                ]
 
-emojis = ["❤️", "♥️", "💗", "💓", "💕", "💖", "💞 " "💘", "💛", "💙", "💜", "💚", "💝", "💌", "🌝", "🌞", "☀️"]
+emojis = ["❤️", "♥️", "💗", "💓", "💕", "💖", "💞 " "💘", "💛", "💙", "💜", "💚", "💝", "💌", "🌝", "🌞", "☀️", "🌸",
+          "🌹", "🌺", "🌻", "💐", "🌼", "🏵️", "⭐", "🌟", "🌠", "🌈"]
 
 prefixrandomizer = random.randint(0, 10)
 complimentsrandomizer = random.randint(0, 17)
@@ -138,9 +157,9 @@ def exitBot():
 def threader():
     running = True
     while running is True:
-        t = threading.Thread(target=tweeter)
-        t.start()
-        t1 = threading.Thread(target=new_follower)
-        t1.start()
+        tweeterThread = threading.Thread(target=tweeter)
+        tweeterThread.start()
+        followerThread = threading.Thread(target=new_follower)
+        followerThread.start()
         replier()
 
