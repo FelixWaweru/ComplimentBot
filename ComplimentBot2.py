@@ -119,6 +119,9 @@ def tweeter():
                 time.sleep(7200)
                 break
 
+
+
+
 def replier():
     #reply to statuses directed towards the bot
     ReplyStreamer = replyStreamer()
@@ -148,15 +151,43 @@ def new_follower():
 def exitBot():
     sys.exit(0)
 
-def threader():
-    running = True
-    while running is True:
-        tweeterThread = threading.Thread(target=tweeter)
-        tweeterThread.start()
-        followerThread = threading.Thread(target=new_follower)
-        followerThread.start()
-        replier()
+running = True
 
-replier()
+def tweeter2():
+    while running is True:
+        print("Tweeter3")
+        for i in range(5, 0, -1):
+            time.sleep(1)
+            sys.stdout.write(str(i) + ' ')
+            sys.stdout.flush()
+
+
+def tweeter3():
+    while running is True:
+        print("\n")
+        print("Tweeter2")
+        time.sleep(1)
+
+def threader():
+
+    tweeter2Thread = threading.Thread(target=tweeter2)
+    tweeter3Thread = threading.Thread(target=tweeter3)
+    tweeter2Thread.start()
+    tweeter3Thread.start()
+
+
+
+threader()
+
+#
+#
+#
+#
+# a = 1
+# while a == 1:
+#     print("\n")
+#     tweeter2()
+
+
 
 

@@ -15,3 +15,7 @@ print('Connected')
 api = tweepy.API(auth)
 
 print(api.followers_ids(screen_name="GoodFeelsBot"))
+
+list1 = [1,2,3]
+list2 = [2,3,4]
+print(list(set(list1).symmetric_difference(set(list2))))

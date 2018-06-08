@@ -17,6 +17,9 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 print('Connected')
+
+running = True
+
 prefix = ["I hope you know that",
           "Remember that",
           "Please know that",
@@ -70,14 +73,14 @@ compliments = ["an amazing person.",
 emojis = ["❤️", "♥️", "💗", "💓", "💕", "💖", "💞 " "💘", "💛", "💙", "💜", "💚", "💝", "💌", "🌝", "🌞", "☀️", "🌸",
           "🌹", "🌺", "🌻", "💐", "🌼", "🏵️", "⭐", "🌟", "🌠", "🌈"]
 
-prefixrandomizer = random.randint(0, 10)
-complimentsrandomizer = random.randint(0, 17)
-emojirandomizer = random.randint(0, 16)
+prefixrandomizer = random.randint(0, 11)
+complimentsrandomizer = random.randint(0, 34)
+emojirandomizer = random.randint(0, 27)
 update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[emojirandomizer]
 
-prefixrandomizer = random.randint(0, 10)
-complimentsrandomizer = random.randint(0, 17)
-emojirandomizer = random.randint(0, 16)
+prefixrandomizer = random.randint(0, 11)
+complimentsrandomizer = random.randint(0, 34)
+emojirandomizer = random.randint(0, 27)
 update2 = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[emojirandomizer]
 
 allstatus = [update, update2]
@@ -88,9 +91,9 @@ allupdates = update
 class replyStreamer(tweepy.StreamListener):
     # Method carried out when tweet is received
     def on_status(self, status):
-        prefixrandomizer2 = random.randint(0, 10)
-        complimentsrandomizer2 = random.randint(0, 17)
-        emojirandomizer2 = random.randint(0, 16)
+        prefixrandomizer2 = random.randint(0, 11)
+        complimentsrandomizer2 = random.randint(0, 34)
+        emojirandomizer2 = random.randint(0, 27)
         reply = prefix[prefixrandomizer2] + " you are " + compliments[complimentsrandomizer2] + " : " \
                 + emojis[emojirandomizer2]
         print("Reply received.")
@@ -104,20 +107,31 @@ class replyStreamer(tweepy.StreamListener):
 
 
 def tweeter():
-    try:
-        api.update_status(allupdates)
-        print("Tweet Sent")
-        time.sleep(7200)
-    except tweepy.error.TweepError:
-        for status in api.user_timeline():
-            if status == allupdates:
-                print("Uh oh. Deleting already sent tweet")
-                status_id = status.id
-                api.destroy_status(status_id)
-                api.update_status(allupdates)
-                print("Tweet Resent")
-                time.sleep(7200)
-                break
+    while running is True:
+        try:
+            api.update_status(allupdates)
+            print("Tweet Sent \n")
+            print("Countdown to next Tweet \n")
+            for i in range(120, 0, -1):
+                time.sleep(60)
+                sys.stdout.write(str(i) + ' ')
+                sys.stdout.flush()
+
+        except tweepy.error.TweepError:
+            for status in api.user_timeline():
+                if status == allupdates:
+                    print("Uh oh. Deleting already sent tweet")
+                    status_id = status.id
+                    api.destroy_status(status_id)
+                    api.update_status(allupdates)
+                    print("Tweet Resent \n")
+                    print("Countdown to next Tweet \n")
+                    for i in range(120, 0, -1):
+                        time.sleep(60)
+                        sys.stdout.write(str(i) + ' ')
+                        sys.stdout.flush()
+                    break
+
 
 def replier():
     #reply to statuses directed towards the bot
@@ -126,43 +140,43 @@ def replier():
 
     replyTwt = myStream.filter(track=['@GoodFeelsBot'], async=True)
 
-def new_follower():
-    new_followers = api.followers()
-    for follower in new_followers:
-        with open('/home/MeanBot001/ComplimentBot/Followers.txt', 'r') as textCheck1:
-            followerId = follower.id
-            str(followerId)
-            followerLine = textCheck1.readlines()
-            if str(followerId) in followerLine:
-                    break
-            elif str(followerId) not in followerLine:
-                with codecs.open('/home/MeanBot001/ComplimentBot/Followers.txt', 'w') as followerText:
-                    for i in new_followers:
-                        api.send_direct_message(user_id=i.id,
-                                            text="Heyhey @" + i.screen_name + ". Stick around for some daily positivity or mention me "
-                                                                              "anywhere on Twitter and I'll bring the positivity to you :)")
-                        print("You messaged new user @" + i.screen_name)
-                        followerText.writelines(str(followerId) + "\n")
-            break
+# def new_follower():
+#     new_followers = api.followers()
+#     for follower in new_followers:
+#         with open('/home/MeanBot001/ComplimentBot/Followers.txt', 'r') as textCheck1:
+#             followerId = follower.id
+#             str(followerId)
+#             followerLine = textCheck1.readlines()
+#             if str(followerId) in followerLine:
+#                     break
+#             elif str(followerId) not in followerLine:
+#                 with codecs.open('/home/MeanBot001/ComplimentBot/Followers.txt', 'w') as followerText:
+#                     for i in new_followers:
+#                         api.send_direct_message(user_id=i.id,
+#                                             text="Heyhey @" + i.screen_name + ". Stick around for some daily positivity or mention me "
+#                                                                               "anywhere on Twitter and I'll bring the positivity to you :)")
+#                         print("You messaged new user @" + i.screen_name)
+#                         followerText.writelines(str(followerId) + "\n")
+#             break
 
 def directMessenger():
     allFollowers = api.followers()
     message = input("Please type in your bulk message: \n")
     for i in allFollowers:
         api.send_direct_message(user_id=i.id,
-                                text="Heyhey @" + i.screen_name + " ." + message)
+                                text="Heyhey @" + i.screen_name + " . " + message)
         print("You messaged @" + i.screen_name)
 
 def exitBot():
     sys.exit(0)
 
 def threader():
-    running = True
-    while running is True:
-        tweeterThread = threading.Thread(target=tweeter)
-        tweeterThread.start()
-        # followerThread = threading.Thread(target=new_follower)
-        # followerThread.start()
-        replierThread = threading.Thread(target=replier)
-        replierThread.start()
+    tweeterThread = threading.Thread(target=tweeter)
+    # followerThread = threading.Thread(target=new_follower)
+    replierThread = threading.Thread(target=replier)
+
+    tweeterThread.start()
+    # followerThread.start()
+    replierThread.start()
+
 

@@ -55,7 +55,7 @@ def terminalExecution():
             choice2 = input("y/n: ")
             if choice2 == "y" or choice2 == "Y":
                 try:
-                    ComplimentBot.exitBot()
+                    botLaunch.exit()
                     print("Bot terminated successfully.")
                 except:
                     print("Bot could not be terminated. Pls try again")
