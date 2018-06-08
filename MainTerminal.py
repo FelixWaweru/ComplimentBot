@@ -10,10 +10,11 @@ firstOption = "0: Launch Bot "
 secondOption = "1: Launch Tweet Deleter "
 thirdOption = "2: Exit/ Terminate Bot "
 fourthOption = "3: Exit Terminal "
+fifthOption = "4: Send Bulk Message to all followers"
 
 def options():
     print("\n")
-    print(firstOption + "\n" + secondOption + "\n" + thirdOption + "\n" + fourthOption + "\n")
+    print(firstOption + "\n" + secondOption + "\n" + thirdOption + "\n" + fourthOption + "\n" + fifthOption + "\n")
 
 def terminalExecution():
     a = 1
@@ -73,6 +74,19 @@ def terminalExecution():
             elif choice3 == "n" or choice3 == "N":
                 print("Cancelling Terminal termination")
 
+        elif selection == "4":
+            print("You chose " + fifthOption + "\n")
+            print("Are you sure you want to send bulk message to all followers?" + "\n")
+            choice4 = input("y/n: ")
+            if choice4 == "y" or choice4 == "Y":
+                try:
+                    print("Bulk messaging commencing.")
+                    bulkDm = threading.Thread(target=ComplimentBot.directMessenger())
+                    bulkDm.start()
+                except:
+                    print("Bulk messages could not be sent. Pls try again")
+            elif choice4 == "n" or choice4 == "N":
+                print("Cancelling bulk messaging.")
         else:
             options()
             print("Please input an appropriate value.")

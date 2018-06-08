@@ -145,6 +145,14 @@ def new_follower():
                         followerText.writelines(str(followerId) + "\n")
             break
 
+def directMessenger():
+    allFollowers = api.followers()
+    message = input("Please type in your bulk message: \n")
+    for i in allFollowers:
+        api.send_direct_message(user_id=i.id,
+                                text="Heyhey @" + i.screen_name + " ." + message)
+        print("You messaged @" + i.screen_name)
+
 def exitBot():
     sys.exit(0)
 
