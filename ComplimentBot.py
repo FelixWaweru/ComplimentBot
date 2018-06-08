@@ -153,8 +153,8 @@ def threader():
     while running is True:
         tweeterThread = threading.Thread(target=tweeter)
         tweeterThread.start()
-        followerThread = threading.Thread(target=new_follower)
-        followerThread.start()
+        # followerThread = threading.Thread(target=new_follower)
+        # followerThread.start()
         replierThread = threading.Thread(target=replier)
         replierThread.start()
 
