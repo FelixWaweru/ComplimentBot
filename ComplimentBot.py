@@ -15,7 +15,7 @@ ACCESS_KEY = secrets.ACCESS_KEY
 ACCESS_SECRET = secrets.ACCESS_SECRET
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
-api = tweepy.API(auth)
+api = tweepy.API(auth, wait_on_rate_limit=True)
 print('Connected')
 
 running = True
@@ -86,7 +86,7 @@ update2 = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandom
 allstatus = [update, update2]
 statusrandomizer = random.randint(0, 1)
 # allupdates = allstatus[statusrandomizer]
-allupdates = update
+allupdates = allstatus[statusrandomizer]
 
 class replyStreamer(tweepy.StreamListener):
     # Method carried out when tweet is received
@@ -109,28 +109,24 @@ class replyStreamer(tweepy.StreamListener):
 def tweeter():
     while running is True:
         try:
-            api.update_status(allupdates)
+            api.update_status(update)
             print("Tweet Sent \n")
             print("Countdown to next Tweet \n")
-            for i in range(120, 0, -1):
-                time.sleep(60)
+            for i in range(120, 0, -10):
+                time.sleep(600)
                 sys.stdout.write(str(i) + ' ')
                 sys.stdout.flush()
 
         except tweepy.error.TweepError:
-            for status in api.user_timeline():
-                if status == allupdates:
-                    print("Uh oh. Deleting already sent tweet")
-                    status_id = status.id
-                    api.destroy_status(status_id)
-                    api.update_status(allupdates)
-                    print("Tweet Resent \n")
-                    print("Countdown to next Tweet \n")
-                    for i in range(120, 0, -1):
-                        time.sleep(60)
-                        sys.stdout.write(str(i) + ' ')
-                        sys.stdout.flush()
-                    break
+            api.update_status(update2)
+            print("Tweet Resent \n")
+            print("Countdown to next Tweet \n")
+            for i in range(120, 0, -10):
+                time.sleep(600)
+                sys.stdout.write(str(i) + ' ')
+                sys.stdout.flush()
+                break
+
 
 
 def replier():
