@@ -41,8 +41,8 @@ def terminalExecution():
             if choice1 == "y" or choice1 == "Y":
                 try:
                     print("Tweet deletion commencing.")
-                    deleteTweet = threading.Thread(target=Deleter.startDeletion())
-                    deleteTweet.start()
+                    delete_tweet = threading.Thread(target=Deleter.startDeletion())
+                    delete_tweet.start()
                 except:
                     print("Tweets could not be deleted. Pls try again")
             elif choice1 == "n" or choice1 == "N":
@@ -81,7 +81,7 @@ def terminalExecution():
             if choice4 == "y" or choice4 == "Y":
                 try:
                     print("Bulk messaging commencing.")
-                    bulkDm = threading.Thread(target=ComplimentBot.directMessenger())
+                    bulkDm = threading.Thread(target=ComplimentBot.direct_messenger())
                     bulkDm.start()
                 except:
                     print("Bulk messages could not be sent. Pls try again")
