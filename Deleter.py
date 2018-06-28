@@ -13,6 +13,8 @@ auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 print('Connected')
 
+
+
 def deleter():
     for status in api.user_timeline():
         print("Deleting tweet.")
@@ -22,10 +24,10 @@ def deleter():
 
 def startDeletion():
     loops = input("How many tweets you want gone cuz? \n")
-    int(loops)
     i = 0
-    while i != loops:
+    while i is not int(loops):
         deleter()
         i = i + 1
         # else i == loops:
         #     print("It's done cuz.")
+

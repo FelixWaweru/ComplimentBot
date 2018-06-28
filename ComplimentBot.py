@@ -75,41 +75,54 @@ compliments = ["an amazing person.",
 emojis = ["❤️", "♥️", "💗", "💓", "💕", "💖", "💞 " "💘", "💛", "💙", "💜", "💚", "💝", "💌", "🌝", "🌞", "☀️", "🌸",
           "🌹", "🌺", "🌻", "💐", "🌼", "🏵️", "⭐", "🌟", "🌠", "🌈"]
 
+prefixrandomizer = random.randint(0, 10)
+complimentsrandomizer = random.randint(0, 34)
+emojirandomizer = random.randint(0, 27)
+update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[emojirandomizer]
 
-# Class used to generate randomized and unique replies
-class reply_generator():
-    def randomizer(self):
-        prefixrandomizer = random.randint(0, 11)
-        complimentsrandomizer = random.randint(0, 34)
-        emojirandomizer = random.randint(0, 27)
-        update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[
-            emojirandomizer]
-        return print(update)
+prefixrandomizer = random.randint(0, 10)
+complimentsrandomizer = random.randint(0, 34)
+emojirandomizer = random.randint(0, 27)
+update2 = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[emojirandomizer]
 
-# reply_generator object
-rep = reply_generator()
+allstatus = [update, update2]
+statusrandomizer = random.randint(0, 1)
+# allupdates = allstatus[statusrandomizer]
+allupdates = allstatus[statusrandomizer]
+
+# # Method used to generate randomized and unique replies
+# def randomizer():
+#     prefixrandomizer = random.randint(0, 10)
+#     complimentsrandomizer = random.randint(0, 34)
+#     emojirandomizer = random.randint(0, 27)
+#     update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[
+#         emojirandomizer]
+#     return print(update)
 
 
-# Class used to generate a persistent conection to the bot Replies
-class reply_streamer(tweepy.StreamListener):
+# Class used to generate a persistent connection to the bot Replies
+class replyStreamer(tweepy.StreamListener):
     # Method carried out when tweet is received
     def on_status(self, status):
+        prefixrandomizer2 = random.randint(0, 10)
+        complimentsrandomizer2 = random.randint(0, 34)
+        emojirandomizer2 = random.randint(0, 27)
+        reply = prefix[prefixrandomizer2] + " you are " + compliments[complimentsrandomizer2] + " : " \
+                + emojis[emojirandomizer2]
         print("Reply received.")
         print(status.text)
         sn = status.user.screen_name
         str(sn)
-        m = "@" + sn + " Heyhey. " + rep.randomizer() + " :) @" + sn
+        m = "@" + sn + " Heyhey. " + reply + " :) @" + sn
         api.create_favorite(status.id)
         api.update_status(m, status.id)
         print("Reply Sent")
 
 
-# Method used to post tweets periodically
 def tweeter():
     while running is True:
         try:
-            tweet = rep.randomizer()
-            api.update_status(tweet)
+            api.update_status(update)
             print("Tweet Sent \n")
             print("Countdown to next Tweet \n")
             for i in range(120, 0, -10):
@@ -118,27 +131,21 @@ def tweeter():
                 sys.stdout.flush()
 
         except tweepy.error.TweepError:
-            for status in api.user_timeline():
-                if status == tweet:
-                    print("Uh oh. Deleting already sent tweet")
-                    status_id = status.id
-                    api.destroy_status(status_id)
-                    api.update_status(rep.randomizer())
-                    print("Tweet Resent")
-                    print("Countdown to next Tweet \n")
-                    for i in range(120, 0, -10):
-                        time.sleep(600)
-                        sys.stdout.write(str(i) + ' ')
-                        sys.stdout.flush()
-                        break
+            api.update_status(update2)
+            print("Tweet Resent \n")
+            print("Countdown to next Tweet \n")
+            for i in range(120, 0, -10):
+                time.sleep(600)
+                sys.stdout.write(str(i) + ' ')
+                sys.stdout.flush()
+                break
 
 
-# Method used to listen to and reply to tweets directed at the bot
 
 def replier():
-    # reply to statuses directed towards the bot
-    rep_streamer = reply_streamer()
-    myStream = tweepy.Stream(auth=api.auth, listener=rep_streamer)
+    #reply to statuses directed towards the bot
+    ReplyStreamer = replyStreamer()
+    myStream = tweepy.Stream(auth=api.auth, listener=ReplyStreamer)
 
     replyTwt = myStream.filter(track=['@GoodFeelsBot'], async=True)
 
