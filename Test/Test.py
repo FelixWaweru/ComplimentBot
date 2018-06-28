@@ -67,19 +67,39 @@ emojis = ["❤️", "♥️", "💗", "💓", "💕", "💖", "💞 " "💘", "�
           "🌹", "🌺", "🌻", "💐", "🌼", "🏵️", "⭐", "🌟", "🌠", "🌈"]
 
 
+prefixrandomizer = random.randint(0, 10)
+complimentsrandomizer = random.randint(0, 34)
+emojirandomizer = random.randint(0, 27)
+update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[emojirandomizer]
+
+prefixrandomizer = random.randint(0, 10)
+complimentsrandomizer = random.randint(0, 34)
+emojirandomizer = random.randint(0, 27)
+update2 = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[emojirandomizer]
+
+i = 0
+while i is not 12:
+    print(prefix[i])
+    i = i+1
+
+
+def randomizer():
+    prefixrandomizer = random.randint(0, 11)
+    complimentsrandomizer = random.randint(0, 34)
+    emojirandomizer = random.randint(0, 27)
+    update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[
+        emojirandomizer]
+    return print(update)
+
+
 
 class Replier():
-    def randomizer(self):
-        prefixrandomizer = random.randint(0, 11)
-        complimentsrandomizer = random.randint(0, 34)
-        emojirandomizer = random.randint(0, 27)
-        update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[
-            emojirandomizer]
-        return print(update)
+    print("Hello")
 
 
 i = 0
-while i is not 5:
+while i is not 10:
     rep = Replier()
-    rep.randomizer()
+    print(update2)
+    print(update)
     i = i + 1
