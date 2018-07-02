@@ -16,18 +16,22 @@ print('Connected')
 
 
 def deleter():
-    for status in api.user_timeline():
-        print("Deleting tweet.")
-        status_id = status.id
-        api.destroy_status(status_id)
-        break
+    try:
+        for status in api.user_timeline():
+            print("Deleting tweet.\n")
+            status_id = status.id
+            api.destroy_status(status_id)
+            print("Tweets deleted.\n")
+            break
+    except:
+        print("Tweet could not be deleted. Pls try again later.\n")
 
 def startDeletion():
-    loops = input("How many tweets you want gone cuz? \n")
+    loops = input("How many tweets you want gone? \n")
     i = 0
     while i is not int(loops):
         deleter()
         i = i + 1
-        # else i == loops:
-        #     print("It's done cuz.")
+    else:
+        print("Deletion completed.")
 
