@@ -111,7 +111,7 @@ def tweeter():
             print("Tweet Sent \n")
             print("Tweet: " + tweet + "\n")
             print("Countdown to next Tweet \n")
-            for i in range(120, 0, -10):
+            for i in range(240, 0, -10):
                 time.sleep(600)
                 sys.stdout.write(str(i) + ' ')
                 sys.stdout.flush()
@@ -121,7 +121,7 @@ def tweeter():
             print("Tweet Resent \n")
             print("Tweet: " + tweet + "\n")
             print("Countdown to next Tweet \n")
-            for i in range(120, 0, -10):
+            for i in range(240, 0, -10):
                 time.sleep(600)
                 sys.stdout.write(str(i) + ' ')
                 sys.stdout.flush()
