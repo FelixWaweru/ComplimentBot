@@ -22,12 +22,29 @@ running = True
 
 # Prefixes that are appended to the beginning of the tweets
 prefix = ["I hope you know that",
+          "Remember,",
+          "Remind yourself,",
           "Remember that",
+          "Please remember,",
+          "Kindly remind yourself that",
+          "Kindly remind yourself,",
+          "Appreciate yourself,"
+          "Take it easy today,",
+          "Take a break and know that",
+          "Somebody would want you to know that",
+          "You are cared for and"
+          "Forget your worries,",
+          "Hello there,",
+          "Recognize that",
+          "Bear in mind,",
           "Please know that",
           "Do know that",
           "Know that",
+          "Be conscious of the fact that",
+          "Be aware of the fact that",
+          "Realize that",
           "Please remember,",
-          "Hey there,",
+          "Hey,",
           "Keep in mind that",
           "Remind yourself that",
           "Take some time today to remember that",
@@ -51,6 +68,10 @@ compliments = ["an amazing person.",
                "worth the life you have been gifted.",
                "deserving of all the love in the world.",
                "looking lovely today.",
+               "lovely.",
+               "breathtaking.",
+               "unique.",
+               "truly wonderful.",
                "talented.",
                "so special.",
                "beautiful.",
@@ -81,21 +102,20 @@ def tweet_randomizer():
     prefixrandomizer = random.randint(0, (len(prefix)-1))
     complimentsrandomizer = random.randint(0, (len(compliments)-1))
     emojirandomizer = random.randint(0, (len(emojis)-1))
-    update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[
+    update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + "  " + emojis[
         emojirandomizer]
     return update
 
-tweet = tweet_randomizer()
 
 # Class used to generate a persistent connection to the bot Replies
 class replyStreamer(tweepy.StreamListener):
     # Method carried out when tweet is received
     def on_status(self, status):
-        print("Reply received.")
-        print(status.text)
         sn = status.user.screen_name
+        print("\n Reply received from " + sn + "\n")
+        print(status.text)
         str(sn)
-        m = "@" + sn + " Hey. " + tweet + " :) @" + sn
+        m = "@" + sn + " Hello " + "@" + sn + " . " + tweet_randomizer() + "\n I hope you have a great day today :)"
         api.create_favorite(status.id)
         api.update_status(m, status.id)
         print("Reply Sent")
@@ -107,9 +127,8 @@ class replyStreamer(tweepy.StreamListener):
 def tweeter():
     while running is True:
         try:
-            api.update_status(tweet)
+            api.update_status(tweet_randomizer())
             print("Tweet Sent \n")
-            print("Tweet: " + tweet + "\n")
             print("Countdown to next Tweet \n")
             for i in range(240, 0, -10):
                 time.sleep(600)
@@ -117,9 +136,8 @@ def tweeter():
                 sys.stdout.flush()
 
         except tweepy.error.TweepError:
-            api.update_status(tweet)
+            api.update_status(tweet_randomizer())
             print("Tweet Resent \n")
-            print("Tweet: " + tweet + "\n")
             print("Countdown to next Tweet \n")
             for i in range(240, 0, -10):
                 time.sleep(600)

@@ -67,39 +67,57 @@ emojis = ["❤️", "♥️", "💗", "💓", "💕", "💖", "💞 " "💘", "�
           "🌹", "🌺", "🌻", "💐", "🌼", "🏵️", "⭐", "🌟", "🌠", "🌈"]
 
 
-prefixrandomizer = random.randint(0, 10)
-complimentsrandomizer = random.randint(0, 34)
-emojirandomizer = random.randint(0, 27)
-update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[emojirandomizer]
+# prefixrandomizer = random.randint(0, 10)
+# complimentsrandomizer = random.randint(0, 34)
+# emojirandomizer = random.randint(0, 27)
+# update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[emojirandomizer]
+#
+# prefixrandomizer = random.randint(0, 10)
+# complimentsrandomizer = random.randint(0, 34)
+# emojirandomizer = random.randint(0, 27)
+# update2 = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[emojirandomizer]
 
-prefixrandomizer = random.randint(0, 10)
-complimentsrandomizer = random.randint(0, 34)
-emojirandomizer = random.randint(0, 27)
-update2 = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[emojirandomizer]
-
-i = 0
-while i is not 12:
-    print(prefix[i])
-    i = i+1
+# i = 0
+# while i is not 12:
+#     print(prefix[i])
+#     i = i+1
 
 
-def randomizer():
-    prefixrandomizer = random.randint(0, 11)
-    complimentsrandomizer = random.randint(0, 34)
-    emojirandomizer = random.randint(0, 27)
-    update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " : " + emojis[
+# Used to randomize the generated tweets
+def tweet_randomizer():
+    prefixrandomizer = random.randint(0, (len(prefix)-1))
+    complimentsrandomizer = random.randint(0, (len(compliments)-1))
+    emojirandomizer = random.randint(0, (len(emojis)-1))
+    update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " " + emojis[
         emojirandomizer]
-    return print(update)
-
-
-
-class Replier():
-    print("Hello")
-
+    return update
 
 i = 0
-while i is not 10:
-    rep = Replier()
-    print(update2)
-    print(update)
-    i = i + 1
+# while i is not 10:
+#     rep = Replier()
+#     randomizer()
+#     i = i + 1
+
+running = True
+# tweet = tweet_randomizer()
+# while i is not 10:
+#     while running is True:
+#         try:
+#             print(tweet_randomizer())
+#             print("First try Tweet \n")
+#             break
+#
+#         except tweepy.error.TweepError:
+#             print(tweet)
+#             print("Second try Tweet \n")
+#             break
+def on_status():
+    new_followers = api.followers()
+    for i in new_followers:
+        sn = i.screen_name
+        str(sn)
+        m = "@" + sn + " Hello " + "@" + sn + " . " + tweet_randomizer() + "\n I hope you have a great day today :)"
+        print(m)
+
+
+on_status()
