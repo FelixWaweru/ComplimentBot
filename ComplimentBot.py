@@ -28,11 +28,11 @@ prefix = ["I hope you know that",
           "Please remember,",
           "Kindly remind yourself that",
           "Kindly remind yourself,",
-          "Appreciate yourself,"
+          "Appreciate yourself,",
           "Take it easy today,",
           "Take a break and know that",
           "Somebody would want you to know that",
-          "You are cared for and"
+          "You are cared for and",
           "Forget your worries,",
           "Hello there,",
           "Recognize that",
@@ -118,7 +118,7 @@ class replyStreamer(tweepy.StreamListener):
         m = "@" + sn + " Hello " + "@" + sn + " . " + tweet_randomizer() + "\n I hope you have a great day today :)"
         api.create_favorite(status.id)
         api.update_status(m, status.id)
-        print("Reply Sent")
+        print("Reply Sent at " + time.strftime("%Y-%m-%d %H:%M") + "\n")
         print("Tweet: " + m + "\n")
 
 
@@ -128,7 +128,8 @@ def tweeter():
     while running is True:
         try:
             api.update_status(tweet_randomizer())
-            print("Tweet Sent \n")
+            print("Tweet Sent at \n")
+            print (time.strftime("%Y-%m-%d %H:%M") + "\n")
             print("Countdown to next Tweet \n")
             for i in range(240, 0, -10):
                 time.sleep(600)
@@ -137,7 +138,8 @@ def tweeter():
 
         except tweepy.error.TweepError:
             api.update_status(tweet_randomizer())
-            print("Tweet Resent \n")
+            print("Tweet Resent at \n")
+            print (time.strftime("%Y-%m-%d %H:%M") + "\n")
             print("Countdown to next Tweet \n")
             for i in range(240, 0, -10):
                 time.sleep(600)
