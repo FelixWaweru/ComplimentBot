@@ -104,6 +104,7 @@ def tweet_randomizer():
     emojirandomizer = random.randint(0, (len(emojis)-1))
     update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + "  " + emojis[
         emojirandomizer]
+    tweet_randomizer.latest_tweet = update
     return update
 
 
@@ -118,7 +119,7 @@ class replyStreamer(tweepy.StreamListener):
         m = "@" + sn + " Hello " + "@" + sn + " . " + tweet_randomizer() + "\n I hope you have a great day today :)"
         api.create_favorite(status.id)
         api.update_status(m, status.id)
-        print("Reply Sent at " + time.strftime("%Y-%m-%d %H:%M") + "\n")
+        print("\n Reply Sent at " + time.strftime("%Y-%m-%d %H:%M") + "\n")
         print("Tweet: " + m + "\n")
 
 
@@ -128,7 +129,7 @@ def tweeter():
     while running is True:
         try:
             api.update_status(tweet_randomizer())
-            print("Tweet Sent at \n")
+            print("\n ✓ Tweet Sent at \n")
             print (time.strftime("%Y-%m-%d %H:%M") + "\n")
             print("Countdown to next Tweet \n")
             for i in range(240, 0, -10):
@@ -137,15 +138,21 @@ def tweeter():
                 sys.stdout.flush()
 
         except tweepy.error.TweepError:
-            api.update_status(tweet_randomizer())
-            print("Tweet Resent at \n")
-            print (time.strftime("%Y-%m-%d %H:%M") + "\n")
-            print("Countdown to next Tweet \n")
-            for i in range(240, 0, -10):
-                time.sleep(600)
-                sys.stdout.write(str(i) + ' ')
-                sys.stdout.flush()
-                break
+            # Delete and resend new tweet.
+            for status in api.user_timeline():
+                if status.text == tweet_randomizer.latest_tweet:
+                    print("\n ✓ Deleting already sent tweet \n")
+                    status_id = status.id
+                    api.destroy_status(status_id)
+                    api.update_status(tweet_randomizer())
+                    print("\n ✓ Tweet Resent at \n")
+                    print(time.strftime("%Y-%m-%d %H:%M") + "\n")
+                    print("Countdown to next Tweet \n")
+                    for i in range(240, 0, -10):
+                        time.sleep(600)
+                        sys.stdout.write(str(i) + ' ')
+                        sys.stdout.flush()
+                        break
 
 
 

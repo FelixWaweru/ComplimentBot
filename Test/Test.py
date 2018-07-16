@@ -90,7 +90,27 @@ def tweet_randomizer():
     emojirandomizer = random.randint(0, (len(emojis)-1))
     update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + " " + emojis[
         emojirandomizer]
+    tweet_randomizer.latest_tweet = update
     return update
+
+# TODO: Look into automatically following everyone who likes the tweets
+class replyStreamer(tweepy.StreamListener):
+    # Method carried out when tweet is received
+    def on_event(self, status):
+        # print(status)
+        sn = status.source.screen_name
+        print(sn)
+        # if status.event == 'favorite':
+        #     print("Someone liked your post!")
+        #     if api.exists_friendship("@GoodFeelsBot", sn) is False:
+        #         try:
+        #             api.create_friendship(sn)
+        #             print("Now following " + sn + "\n")
+        #         except tweepy.error.TweepError:
+        #             print("Could not follow.")
+        #     else:
+        #         print("You already follow " + sn)
+
 
 i = 0
 # while i is not 10:
@@ -111,13 +131,20 @@ running = True
 #             print(tweet)
 #             print("Second try Tweet \n")
 #             break
-def on_status():
-    new_followers = api.followers()
-    for i in new_followers:
-        sn = i.screen_name
-        str(sn)
-        m = "@" + sn + " Hello " + "@" + sn + " . " + tweet_randomizer() + "\n I hope you have a great day today :)"
-        print(m)
+# def on_status():
+#     new_followers = api.followers()
+#     for i in new_followers:
+#         sn = i.screen_name
+#         str(sn)
+#         m = "@" + sn + " Hello " + "@" + sn + " . " + tweet_randomizer() + "\n I hope you have a great day today :)"
+#         print(m)
+#
+#
+# on_status()
+def stream():
+    ReplyStreamer = replyStreamer()
+    myStream = tweepy.Stream(auth=api.auth, listener=ReplyStreamer)
+    myStream.userstream()
 
 
-on_status()
+stream()
