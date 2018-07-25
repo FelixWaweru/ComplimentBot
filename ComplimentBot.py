@@ -157,11 +157,17 @@ def tweeter():
 
 
 def replier():
-    #reply to statuses directed towards the bot
-    ReplyStreamer = replyStreamer()
-    myStream = tweepy.Stream(auth=api.auth, listener=ReplyStreamer)
+    try:
+        #reply to statuses directed towards the bot
+        ReplyStreamer = replyStreamer()
+        myStream = tweepy.Stream(auth=api.auth, listener=ReplyStreamer)
+        replyTwt = myStream.filter(track=['@GoodFeelsBot'], async=True)
 
-    replyTwt = myStream.filter(track=['@GoodFeelsBot'], async=True)
+    except AttributeError:
+        # reply to statuses directed towards the bot
+        ReplyStreamer = replyStreamer()
+        myStream = tweepy.Stream(auth=api.auth, listener=ReplyStreamer)
+        replyTwt = myStream.filter(track=['@GoodFeelsBot'], async=True)
 
 # def new_follower():
 #     new_followers = api.followers()
