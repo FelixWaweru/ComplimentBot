@@ -48,7 +48,8 @@ prefix = ["I hope you know that",
           "Keep in mind that",
           "Remind yourself that",
           "Take some time today to remember that",
-          "It's a fact that"]
+          "It's a fact that"
+          ]
 
 # Compliments that are appended to the middle of the tweets
 compliments = ["an amazing person.",
@@ -73,7 +74,7 @@ compliments = ["an amazing person.",
                "unique.",
                "truly wonderful.",
                "talented.",
-               "so special.",
+               "so very special.",
                "beautiful.",
                "one of a kind.",
                "capable of anything you put your mind to.",
@@ -94,7 +95,9 @@ compliments = ["an amazing person.",
 
 # Emojis that are appended to the end of the tweets
 emojis = ["❤️", "♥️", "💗", "💓", "💕", "💖", "💞 " "💘", "💛", "💙", "💜", "💚", "💝", "💌", "🌝", "🌞", "☀️", "🌸",
-          "🌹", "🌺", "🌻", "💐", "🌼", "🏵️", "⭐", "🌟", "🌠", "🌈"]
+          "🌹", "🌺", "🌻", "💐", "🌼", "🏵️", "⭐", "🌟", "🌠", "🌈", "😁",  "😃", "😄", "😆", "😊", "☺️", "🙂", "😌",
+          "😺", "😸", "👍"
+          ]
 
 
 # Used to randomize the generated tweets
@@ -111,12 +114,27 @@ def tweet_randomizer():
 # Class used to generate a persistent connection to the bot Replies
 class replyStreamer(tweepy.StreamListener):
     # Method carried out when tweet is received
+
     def on_status(self, status):
+        sentence_end = ["I hope you have a great day today",
+                        "Keep warm today",
+                        "I hope you have a great week",
+                        "I hope you have a great day",
+                        "Hope you're taking care of yourself",
+                        "Have an amazing day",
+                        "I look forward to chatting with you again soon",
+                        "Take care",
+                        "I’ll see you soon",
+                        "Please stay safe"
+                        ]
+        sentence_end_randomizer = random.randint(0, (len(sentence_end) - 1))
+
         sn = status.user.screen_name
         print("\n Reply received from " + sn + "\n")
         print(status.text)
         str(sn)
-        m = "@" + sn + " Hello " + "@" + sn + " . " + tweet_randomizer() + "\n I hope you have a great day today :)"
+        m = "@" + sn + " Hello " + "@" + sn + " . " + tweet_randomizer() + \
+            "\n" + sentence_end[sentence_end_randomizer] + " :)"
         api.create_favorite(status.id)
         api.update_status(m, status.id)
         print("\n Reply Sent at " + time.strftime("%Y-%m-%d %H:%M") + "\n")
