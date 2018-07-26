@@ -29,6 +29,7 @@ def follow(userName):
             try:
                 api.create_friendship(id)
                 print("Followed")
+                time.sleep(300)
             except tweepy.error.TweepError:
                 error = str(tweepy.error.TweepError)
                 print('Error. Skipping user follow \n')
@@ -42,5 +43,5 @@ def follow(userName):
                     continue
 
     except:
-        print("Please enter a valid username pls")
+        print("Please enter a valid username pls \n")
 
