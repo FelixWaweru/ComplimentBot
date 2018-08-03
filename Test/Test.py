@@ -2,6 +2,7 @@ import codecs
 import secrets
 import tweepy
 import random
+import re
 
 CONSUMER_KEY = secrets.CONSUMER_KEY
 CONSUMER_SECRET = secrets.CONSUMER_SECRET
@@ -11,7 +12,6 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 print('Connected')
-
 
 prefix = ["I hope you know that",
           "Remember that",
@@ -94,12 +94,16 @@ def tweet_randomizer():
     return update
 
 # TODO: Look into automatically following everyone who likes the tweets
-class replyStreamer(tweepy.StreamListener):
-    # Method carried out when tweet is received
-    def on_event(self, status):
-        # print(status)
-        sn = status.source.screen_name
-        print(sn)
+# class replyStreamer(tweepy.StreamListener):
+#     # Method carried out when tweet is received
+#     def on_event(self, status):
+#         print(status.event)
+#
+#         if stream.event is 'favourite':
+#             print("True dat")
+#
+#         else:
+#             print('False')
         # if status.event == 'favorite':
         #     print("Someone liked your post!")
         #     if api.exists_friendship("@GoodFeelsBot", sn) is False:
@@ -111,14 +115,11 @@ class replyStreamer(tweepy.StreamListener):
         #     else:
         #         print("You already follow " + sn)
 
-
-i = 0
 # while i is not 10:
 #     rep = Replier()
 #     randomizer()
 #     i = i + 1
 
-running = True
 # tweet = tweet_randomizer()
 # while i is not 10:
 #     while running is True:
@@ -141,10 +142,34 @@ running = True
 #
 #
 # on_status()
-def stream():
-    ReplyStreamer = replyStreamer()
-    myStream = tweepy.Stream(auth=api.auth, listener=ReplyStreamer)
-    myStream.userstream()
+# def stream():
+#     ReplyStreamer = replyStreamer()
+#     myStream = tweepy.Stream(auth=api.auth, listener=ReplyStreamer)
+#     myStream.userstream()
+#
+#
+# stream()
+# print(api.followers('GoodFeelsBot'))
+# for user in api.followers('GoodFeelsBot'):
+#     print(user.screen_name)
+followers = api.lookup_friendships('GoodFeelsBot','WeruFe')
+followers2 = api.followers_ids('WeruFe')
 
+print(followers2)
+for id in followers2:
+    api.create_friendship(id)
+    print("Followed")
 
-stream()
+# def get_user_ids_of_post_likes(post_id):
+#     try:
+#         json_data = urllib2.urlopen('https://twitter.com/i/activity/favorited_popup?id=' + str(post_id)).read()
+#         found_ids = re.findall(r'data-user-id=\\"+\d+', json_data)
+#         unique_ids = list(set([re.findall(r'\d+', match)[0] for match in found_ids]))
+#         return unique_ids
+#     except urllib2.HTTPError:
+#         return False
+#
+# # Example:
+# # https://twitter.com/golan/status/731770343052972032
+#
+# print (get_user_ids_of_post_likes(731770343052972032))
