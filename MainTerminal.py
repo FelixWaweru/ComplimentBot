@@ -12,7 +12,7 @@ secondOption = "1: Launch Bot "
 thirdOption = "2: Exit/ Terminate Bot "
 fourthOption = "3: Launch Tweet Deleter "
 fifthOption = "4: Send Bulk Message to all followers"
-sixthOption = "5: Follow all the followers of a specific users "
+sixthOption = "5: Follow the followers of a specific user "
 
 def options():
     print("\n")
@@ -78,6 +78,10 @@ def terminalExecution():
 
         # Bulk DMer
         elif selection == "4":
+
+            # Sample DM
+            # Stick around for some daily positivity or mention my username anywhere on Twitter and I'll tweet a compliment just for you :)
+
             print("You chose " + fifthOption + "\n")
             print("Are you sure you want to send bulk message to all followers?" + "\n")
             choice4 = input("y/n: ")
@@ -94,7 +98,7 @@ def terminalExecution():
         # Bulk Follower
         elif selection == "5":
             print("You chose " + sixthOption + "\n")
-            username = input("Input the username of the person's followers you wish to follow: ")
+            username = input("Input the username of the person's followers you wish to follow:(Include the @ sign) ")
             print("Are you sure you want to follow " + str(username) + "'s followers?" + "\n")
             choice5 = input("y/n: ")
             if choice5 == "y" or choice5 == "Y":
@@ -111,5 +115,7 @@ def terminalExecution():
             options()
             print("Please input an appropriate value.")
 
+
 options()
 terminalExecution()
+

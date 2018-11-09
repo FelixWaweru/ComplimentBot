@@ -140,9 +140,22 @@ class replyStreamer(tweepy.StreamListener):
         print("\n Reply Sent at " + time.strftime("%Y-%m-%d %H:%M") + "\n")
         print("Tweet: " + m + "\n")
 
+    def on_data(self, status):
+        status = str(status)
+        default_reply = "Unfortunately, I am currently unable to understand your message. My creator is however working" \
+                        " hard to make it possible for me to understand and communicate with you. Until then I hope you" \
+                        " enjoy more of my compliments and tweets. :)"
+
+        sn = status.user.screen_name
+        print("\n Direct Message received from " + sn + "\n")
+        print(status.text)
+        str(sn)
+        api.send_direct_message(user_id=status.id, text="Hey @" + sn + " . " + default_reply)
+        print("You messaged @" + sn + "\n")
+        print("\n Direct Message Sent at " + time.strftime("%Y-%m-%d %H:%M") + "\n")
 
 
-
+# Method used to generate and post tweets
 def tweeter():
     while running is True:
         try:
@@ -173,7 +186,7 @@ def tweeter():
                         break
 
 
-
+# Method used to auto reply to tweets
 def replier():
     try:
         #reply to statuses directed towards the bot
@@ -187,24 +200,6 @@ def replier():
         myStream = tweepy.Stream(auth=api.auth, listener=ReplyStreamer)
         replyTwt = myStream.filter(track=['@GoodFeelsBot'], async=True)
 
-# def new_follower():
-#     new_followers = api.followers()
-#     for follower in new_followers:
-#         with open('/home/MeanBot001/ComplimentBot/Followers.txt', 'r') as textCheck1:
-#             followerId = follower.id
-#             str(followerId)
-#             followerLine = textCheck1.readlines()
-#             if str(followerId) in followerLine:
-#                     break
-#             elif str(followerId) not in followerLine:
-#                 with codecs.open('/home/MeanBot001/ComplimentBot/Followers.txt', 'w') as followerText:
-#                     for i in new_followers:
-#                         api.send_direct_message(user_id=i.id,
-#                                             text="Heyhey @" + i.screen_name + ". Stick around for some daily positivity or mention me "
-#                                                                               "anywhere on Twitter and I'll bring the positivity to you :)")
-#                         print("You messaged new user @" + i.screen_name)
-#                         followerText.writelines(str(followerId) + "\n")
-#             break
 
 
 # Method used to send a direct message to every user
