@@ -35,14 +35,14 @@ def follow(userName):
                     status = api.show_friendship("@GoodFeelsBot", target_id=id)
                     if status[0].following is False:
                         api.create_friendship(id)
-                        print((times+1) + "Followed " + str(id))
+                        print(str(times+1) + " Followed " + str(id))
                         del followers2[0]
-                        time.sleep(300)
+                        time.sleep(120)
                         break
                     else:
-                        print((times+1) + "Already Following " + str(id))
+                        print(str(times+1) + " Already Following " + str(id))
                         del followers2[0]
-                        break
+                        continue
 
                 except tweepy.error.TweepError:
                     print('\n Error. Skipping user follow \n')
