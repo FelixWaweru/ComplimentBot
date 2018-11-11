@@ -106,7 +106,7 @@ def tweet_randomizer():
     complimentsrandomizer = random.randint(0, (len(compliments)-1))
     emojirandomizer = random.randint(0, (len(emojis)-1))
     update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + "  " + emojis[
-        emojirandomizer]
+        emojirandomizer] + " #Mindfulness #Wellbeing"
     tweet_randomizer.latest_tweet = update
     return update
 
