@@ -99,14 +99,19 @@ emojis = ["❤️", "♥️", "💗", "💓", "💕", "💖", "💞 " "💘", "�
           "😺", "😸", "👍"
           ]
 
+# Hashtags that are appended to the end of the tweets
+hashtags = ["Mindfulness", "Wellbeing", "Meditation", "Solicitude", "Wellness", "Happiness", "Gratitude", "Love"]
 
 # Used to randomize the generated tweets
 def tweet_randomizer():
     prefixrandomizer = random.randint(0, (len(prefix)-1))
     complimentsrandomizer = random.randint(0, (len(compliments)-1))
     emojirandomizer = random.randint(0, (len(emojis)-1))
+    hashtagrandomizer1 = random.randint(0, ((len(hashtags)//2)-1))
+    hashtagrandomizer2 = random.randint(3, (len(hashtags)-1))
+
     update = prefix[prefixrandomizer] + " you are " + compliments[complimentsrandomizer] + "  " + emojis[
-        emojirandomizer] + " #Mindfulness #Wellbeing"
+        emojirandomizer] + " #" + hashtags[hashtagrandomizer1] + " #" + hashtags[hashtagrandomizer2]
     tweet_randomizer.latest_tweet = update
     return update
 
