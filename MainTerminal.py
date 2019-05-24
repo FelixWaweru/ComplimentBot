@@ -13,11 +13,12 @@ thirdOption = "2: Exit/ Terminate Bot "
 fourthOption = "3: Launch Tweet Deleter "
 fifthOption = "4: Send Bulk Message to all followers"
 sixthOption = "5: Follow the followers of a specific user "
+seventhOption = "6: Unfollow accounts that don't follow back "
 
 def options():
     print("\n")
     print(firstOption + "\n" + secondOption + "\n" + thirdOption + "\n" + fourthOption + "\n" + fifthOption + "\n" +
-          sixthOption + "\n")
+          sixthOption + "\n" + seventhOption + "\n")
 
 def terminalExecution():
     a = 1
@@ -110,6 +111,22 @@ def terminalExecution():
                     print("Users could not be followed. Pls try again")
             elif choice5 == "n" or choice5 == "N":
                 print("Cancelling bulk following.")
+
+        #Bulk unfollow
+        elif selection == "6":
+            print("You chose " + seventhOption + "\n")
+            print("Are you sure you want to unfollow accounts?" + "\n")
+            choice6 = input("y/n: ")
+            if choice6 == "y" or choice6 == "Y":
+                try:
+                    print("Unfollowing commencing.")
+                    bulkUnfollow = threading.Thread(target=FollowAccounts.unfollow())
+                    bulkUnfollow.start()
+                except:
+                    print("Users could not be unfollowed. Pls try again")
+            elif choice6 == "n" or choice6 == "N":
+                print("Cancelling bulk unfollow.")
+
 
         else:
             options()
